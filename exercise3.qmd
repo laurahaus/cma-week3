@@ -29,7 +29,7 @@ posmo_coord <- st_coordinates(posmo)
 posmo <- cbind(posmo, posmo_coord)
 #extract one day for analysis
 posmo_filtered <- posmo %>%
-  filter(as.Date(datetime) == "2023-05-04")
+  filter(as.Date(datetime) == "2023-05-02")
 ```
 
 ##Task 1
@@ -61,5 +61,13 @@ posmo_filtered <- posmo_filtered %>%
 #remove static points
 posmo_nstatic <- posmo_filtered %>%
   filter(!static)
+```
+
+##Task 3
+```{r}
+ggplot(posmo_filtered, aes(X, Y)) +
+  geom_point(aes(color=static)) +
+  geom_path() +
+  coord_equal()
 ```
 
