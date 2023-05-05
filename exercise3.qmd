@@ -1,0 +1,33 @@
+---
+title: "exercise3"
+format: html
+---
+
+##Preperation
+```{r}
+library(readr)
+library(magrittr)
+library(sf)
+```
+
+```{r}
+#import own posma data from data folder
+posmo <- read_delim("data/posmo_2023-04-05T00_00_00+02_00-2023-05-04T23_59_59+02_00.csv")
+#select only important columns which are used for further analysis
+posmo <- posmo %>%
+  select(datetime, lon_x, lat_y)
+#transform posmo data into CRS 2056 (LV03)
+posmo <- st_as_sf(posmo, coords = c("lon_x", "lat_y"), crs = 4326, remove = FALSE, na.fail = FALSE) %>%
+  st_transform(crs = 2056)
+head(posmo)
+```
+
+```{r}
+#extract coordinates from posmo data
+posmo_coord <- st_coordinates(posmo)
+#combine the two data sets
+posmo <- cbind(posmo, posmo_coord)
+#extract one day for analysis
+posmo_filtered <- posmo %>%
+  filter(as.Date(datetime) == "2023-05-04")
+```
