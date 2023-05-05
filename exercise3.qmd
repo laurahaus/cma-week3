@@ -31,3 +31,22 @@ posmo <- cbind(posmo, posmo_coord)
 posmo_filtered <- posmo %>%
   filter(as.Date(datetime) == "2023-05-04")
 ```
+
+##Task 1
+```{r}
+#calculate distance between points in moving window
+posmo_filtered <- posmo_filtered %>%
+  mutate(
+    n_plus1 = sqrt((lead(X)-X)^2 + (lead(Y)-Y)^2),
+    n_plus2 = sqrt((lead(X, 2)-X)^2 + (lead(Y, 2)-Y)^2),
+    n_minus1 = sqrt((lag(X)-X)^2 + (lag(Y)-Y)^2),
+    n_minus2 = sqrt((lag(X, 2)-X)^2 + (lag(Y, 2)-Y)^2)
+  )
+#calculate mean distance for moving window
+posmo_filtered <- posmo_filtered %>%
+  rowwise() %>%
+  mutate(
+    stepMean = mean(c(n_plus1, n_plus2, n_minus1, n_minus2))
+  ) %>%
+  ungroup()
+```
