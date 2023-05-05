@@ -50,3 +50,16 @@ posmo_filtered <- posmo_filtered %>%
   ) %>%
   ungroup()
 ```
+
+##Task 2
+```{r}
+#define static points
+posmo_filtered <- posmo_filtered %>%
+  mutate(
+    static = stepMean < mean(stepMean, na.rm = TRUE)
+  )
+#remove static points
+posmo_nstatic <- posmo_filtered %>%
+  filter(!static)
+```
+
