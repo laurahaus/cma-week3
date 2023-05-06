@@ -9,6 +9,7 @@ library(readr)
 library(magrittr)
 library(sf)
 library(lubridate)
+library(RColorBrewer)
 ```
 
 ```{r}
@@ -110,3 +111,21 @@ posmo_filtered %>%
   geom_path() +
   coord_equal()
 ```
+
+##Task 5
+```{r}
+#import pedestrian dataset
+pedestrian <- read_delim("data/pedestrian.csv") %>%
+  as.data.frame()
+#transform pedestrian dataset
+pedestrian <- st_as_sf(pedestrian, coords = c("E", "N"), crs = 2056, remove = FALSE, na.fail = FALSE)
+#display trajectories
+ggplot(pedestrian, aes(E, N)) +
+  facet_wrap(~TrajID) +
+  geom_path() +
+  geom_point(aes(color = factor(TrajID))) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  ggtitle("Visual comparison of the 6 trajectories") + 
+  scale_color_discrete(name = "Trajectory ID")
+```
+
